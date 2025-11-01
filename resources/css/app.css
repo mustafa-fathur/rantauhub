@@ -15,6 +15,21 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
+    /* RantauHub Brand Colors */
+    --color-primary: #122937;        /* Dark blue/teal - main brand color */
+    --color-primary-content: #ffffff; /* White text on primary */
+    --color-secondary: #CEA761;      /* Gold - accent color for highlights */
+    --color-secondary-content: #122937; /* Dark text on secondary */
+    --color-accent: #925E25;         /* Darker gold - tertiary color */
+    --color-accent-content: #ffffff;  /* White text on accent */
+
+    /* Base Colors */
+    --color-base-100: #ffffff;       /* White background */
+    --color-base-200: #f2f2f2;       /* Light gray background */
+    --color-base-300: #e5e6e6;       /* Medium gray background */
+    --color-base-content: #1f2937;    /* Dark text color */
+
+    /* Neutral Colors (zinc scale kept for compatibility) */
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
     --color-zinc-200: #e5e5e5;
@@ -27,15 +42,22 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
+    /* Legacy accent support */
     --color-accent-foreground: var(--color-white);
 }
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
+        --color-primary: #122937;
+        --color-primary-content: #ffffff;
+        --color-secondary: #CEA761;
+        --color-secondary-content: #122937;
+        --color-accent: #925E25;
+        --color-accent-content: #ffffff;
+        --color-base-100: #1f2937;    /* Dark background */
+        --color-base-200: #111827;     /* Darker background */
+        --color-base-300: #0f172a;     /* Darkest background */
+        --color-base-content: #f9fafb; /* Light text on dark */
         --color-accent-foreground: var(--color-neutral-800);
     }
 }

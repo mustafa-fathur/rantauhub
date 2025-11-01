@@ -17,9 +17,14 @@ The platform has three main user types:>
 
 (Optionally: **Admin / Platform provider** to manage users, analytics, and revenue model.)
 
-**Stack:** Laravel 12 + MySQL  
+**Stack:** Laravel 12 + Livewire + Volt + MySQL  
 **PHP Version:** 8.3+  
 **Node Version:** 20+
+
+**UI Framework:** Livewire (Flux + Volt) for reactive components and routing
+- Livewire views are stored in `resources/views/livewire/`
+- Routes use `Volt::route()` for single-file Livewire components
+- Traditional Blade views are in `resources/views/`
 
 ## Project Structure
 ```
@@ -27,20 +32,27 @@ project-root/
 ├── app/
 │   ├── Models/          # Eloquent models
 │   ├── Http/
-│   │   ├── Controllers/ # Request handlers
+│   │   ├── Controllers/ # Request handlers (minimal - prefer Livewire/Volt)
+│   │   ├── Middleware/   # Custom middleware (role, type, etc.)
 │   │   ├── Requests/    # Form validation
 │   │   └── Resources/   # API transformers
 │   ├── Services/        # Business logic
+│   ├── Actions/         # Fortify actions, service actions
+│   ├── Enums/           # PHP 8.3+ backed enums
 │   └── Repositories/    # Data access layer (if used)
 ├── database/
 │   ├── migrations/      # Database schema
 │   └── seeders/         # Sample data
 ├── routes/
-│   ├── web.php         # Web routes
+│   ├── web.php         # Web routes (uses Volt::route() for Livewire)
 │   └── api.php         # API routes
 ├── resources/
-│   └── views/          # Blade templates
-└── tests/              # PHPUnit tests
+│   ├── views/
+│   │   ├── livewire/   # Livewire/Volt components (PRIMARY VIEW LOCATION)
+│   │   ├── components/ # Blade components
+│   │   └── layouts/    # Layout templates
+│   └── css/            # Tailwind CSS
+└── tests/              # Pest/PHPUnit tests
 ```
 
 ## Architecture & Conventions
@@ -90,18 +102,53 @@ project-root/
 ## Key Technologies & Packages
 
 ### Laravel 12 Features in Use
-- [List specific Laravel 12 features you're using, e.g.:]
 - Eloquent ORM with relationships
 - Queue system for background jobs
 - Event/Listener pattern
-- Laravel Sanctum for API authentication
-- Laravel Breeze/Jetstream for auth scaffolding
+- Laravel Fortify for authentication (not Breeze/Jetstream)
+- Middleware system for role and type-based access control
+
+### Livewire & Volt (Primary UI Framework)
+- **Livewire** (`livewire/livewire`) - Full-stack framework for Laravel
+- **Livewire Flux** (`livewire/flux`) - UI component library
+- **Livewire Volt** (`livewire/volt`) - Single-file components (like Inertia but for Livewire)
+- **View Location:** All Livewire views are stored in `resources/views/livewire/`
+- **Routing Pattern:** Use `Volt::route('path', 'livewire.component.name')` for single-file components
+- **Component Pattern:** Single-file components combine PHP logic and Blade template in one file
 
 ### Additional Packages
-- [List Composer packages with their purpose:]
-- `spatie/laravel-permission` - Role & permission management
-- `laravel/telescope` - Debugging & monitoring (dev only)
-- [Add others as needed]
+- `laravel/fortify` - Authentication system (login, registration, password reset, 2FA)
+- `pestphp/pest` - Testing framework
+- `laravel/pint` - Code style fixer
+- `laravel/pail` - Log streaming in development
+- **Vite + Tailwind CSS v4 + DaisyUI** for frontend styling
+
+### Theme & Design System (DaisyUI)
+The application uses a custom DaisyUI theme with RantauHub brand colors:
+
+**Color Palette:**
+- **Primary (`#122937`)**: Dark blue/teal - used for main brand elements, headers, primary buttons, and backgrounds
+- **Secondary (`#CEA761`)**: Gold - accent color for highlights, titles, progress bars, star ratings, and call-to-action buttons
+- **Accent (`#925E25`)**: Darker gold/brown - tertiary color for additional accents and depth
+
+**Usage in Components:**
+- Primary buttons/links: `bg-primary text-primary-content`
+- Secondary highlights: `bg-secondary text-secondary-content`
+- Accent elements: `bg-accent text-accent-content`
+- Backgrounds: `bg-base-100`, `bg-base-200`, `bg-base-300`
+- Text: `text-base-content` (adapts to light/dark mode)
+
+**Theme Configuration:**
+- CSS theme variables defined in `resources/css/app.css` using Tailwind v4 `@theme` syntax
+- DaisyUI theme configuration in `tailwind.config.js` with custom "rantauhub" theme
+- Dark mode support with adjusted base colors
+- Apply theme: `data-theme="rantauhub"` on root element or use DaisyUI's theme system
+
+### View Architecture
+- **Livewire Components:** `resources/views/livewire/*.blade.php` - Primary location for UI components
+- **Blade Components:** `resources/views/components/*` - Reusable Blade components
+- **Layouts:** `resources/views/layouts/*` - Layout templates
+- **Regular Views:** `resources/views/*.blade.php` - Static Blade views
 
 ## Database Schema
 
@@ -204,7 +251,49 @@ php artisan tinker           # Interactive console
 
 ## Common Patterns & Examples
 
-### Creating a New Feature
+### Creating a Livewire/Volt Component
+
+```php
+// 1. Create view: resources/views/livewire/posts/create.blade.php
+// OR create a Volt single-file component
+
+// 2. Route in routes/web.php
+use Livewire\Volt\Volt;
+
+Volt::route('posts/create', 'posts.create')->name('posts.create');
+
+// 3. Volt Single-File Component Example (resources/views/livewire/posts/create.blade.php)
+<?php
+use App\Models\Post;
+use Livewire\Volt\Component;
+
+new class extends Component {
+    public string $title = '';
+    public string $content = '';
+
+    public function save(): void
+    {
+        $validated = $this->validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
+        ]);
+
+        auth()->user()->posts()->create($validated);
+        
+        $this->redirect(route('posts.index'));
+    }
+}; ?>
+
+<div>
+    <form wire:submit="save">
+        <input type="text" wire:model="title" />
+        <textarea wire:model="content"></textarea>
+        <button type="submit">Create Post</button>
+    </form>
+</div>
+```
+
+### Creating a Traditional Feature (if not using Livewire)
 ```php
 // 1. Migration
 Schema::create('posts', function (Blueprint $table) {
@@ -224,7 +313,7 @@ class Post extends Model {
     }
 }
 
-// 3. Controller
+// 3. Controller (prefer Livewire/Volt for most features)
 class PostController extends Controller {
     public function store(Request $request) {
         $validated = $request->validate([
@@ -263,6 +352,7 @@ class PostController extends Controller {
 4. Are there existing helper methods I can use?
 5. Does this need tests?
 6. Will this impact existing features?
+7. **Theme consistency:** Am I using the correct brand colors? (Primary: `#122937`, Secondary: `#CEA761`, Accent: `#925E25`)
 
 ---
 
