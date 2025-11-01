@@ -20,7 +20,7 @@ class MyUmkmController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $businesses = $user->umkmOwner->businesses()
@@ -43,7 +43,7 @@ class MyUmkmController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $business = $user->umkmOwner->businesses()->findOrFail($id);
@@ -64,7 +64,7 @@ class MyUmkmController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $business = $user->umkmOwner->businesses()->findOrFail($id);
@@ -105,7 +105,7 @@ class MyUmkmController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $business = $user->umkmOwner->businesses()->findOrFail($id);

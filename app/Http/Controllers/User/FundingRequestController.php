@@ -22,7 +22,7 @@ class FundingRequestController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         // Get all funding requests for user's businesses
@@ -53,7 +53,7 @@ class FundingRequestController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         // Get verified businesses
@@ -82,7 +82,7 @@ class FundingRequestController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $validated = $request->validate([
@@ -121,7 +121,7 @@ class FundingRequestController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $funding = Funding::with(['business', 'funder.user'])
@@ -146,7 +146,7 @@ class FundingRequestController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $funding = Funding::with('business')

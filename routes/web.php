@@ -14,6 +14,8 @@ use App\Http\Controllers\User\FunderRegistrationController;
 use App\Http\Controllers\User\FunderFundingController;
 use App\Http\Controllers\User\MentoringController;
 use App\Http\Controllers\User\MenteeController;
+use App\Http\Controllers\Public\UmkmController;
+use App\Http\Controllers\Public\MentorController;
 
 // Main Pages
 
@@ -21,13 +23,11 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/umkm', function () {
-    return view('umkm');
-})->name('umkm');
+Route::get('/umkm', [UmkmController::class, 'index'])->name('umkm');
+Route::get('/umkm/{id}', [UmkmController::class, 'show'])->name('umkm.detail');
 
-Route::get('/mentor', function () {
-    return view('mentor');
-})->name('mentor');
+Route::get('/mentor', [MentorController::class, 'index'])->name('mentor');
+Route::get('/mentor/{id}', [MentorController::class, 'show'])->name('mentor.detail');
 
 Route::get('/forum', function () {
     return view('forum');
@@ -37,13 +37,6 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
-Route::get('/umkm/detail', function () {
-    return view('umkm-detail');
-})->name('umkm.detail');
-
-Route::get('/mentor/detail', function () {
-    return view('mentor-detail');
-})->name('mentor.detail');
 
 Route::get('/forum/detail', function () {
     return view('forum-detail');
@@ -72,16 +65,16 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
         Route::post('funder', [FunderRegistrationController::class, 'store'])->name('funder.store');
     });
     
-    // UMKM Management Routes (only for UMKM Owners)
-    Route::middleware(['auth', 'type:umkm_owner'])->prefix('user')->name('my-umkm.')->group(function () {
+    // UMKM Management Routes (check in controller if user has umkmOwner profile)
+    Route::prefix('user')->name('my-umkm.')->group(function () {
         Route::get('umkm-saya', [MyUmkmController::class, 'index'])->name('index');
         Route::get('umkm-saya/{id}/edit', [MyUmkmController::class, 'edit'])->name('edit');
         Route::put('umkm-saya/{id}', [MyUmkmController::class, 'update'])->name('update');
         Route::delete('umkm-saya/{id}', [MyUmkmController::class, 'destroy'])->name('destroy');
     });
     
-    // Funding Request Routes (only for UMKM Owners)
-    Route::middleware(['auth', 'type:umkm_owner'])->prefix('user')->name('funding-requests.')->group(function () {
+    // Funding Request Routes (check in controller if user has umkmOwner profile)
+    Route::prefix('user')->name('funding-requests.')->group(function () {
         Route::get('funding-requests', [FundingRequestController::class, 'index'])->name('index');
         Route::get('funding-requests/create', [FundingRequestController::class, 'create'])->name('create');
         Route::post('funding-requests', [FundingRequestController::class, 'store'])->name('store');
@@ -89,8 +82,8 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
         Route::put('funding-requests/{id}/cancel', [FundingRequestController::class, 'cancel'])->name('cancel');
     });
     
-    // Mentoring Routes (only for UMKM Owners)
-    Route::middleware(['auth', 'type:umkm_owner'])->prefix('user')->name('mentoring.')->group(function () {
+    // Mentoring Routes (check in controller if user has umkmOwner profile)
+    Route::prefix('user')->name('mentoring.')->group(function () {
         Route::get('mentoring', [MentoringController::class, 'index'])->name('index');
         Route::get('mentoring/create', [MentoringController::class, 'create'])->name('create');
         Route::post('mentoring', [MentoringController::class, 'store'])->name('store');
@@ -98,30 +91,24 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
         Route::post('mentoring/{id}/rate', [MentoringController::class, 'rate'])->name('rate');
         Route::delete('mentoring/{id}', [MentoringController::class, 'cancel'])->name('cancel');
     });
-});
-
-// User type specific routes
-Route::middleware(['auth', 'type:umkm_owner'])->prefix('umkm')->name('umkm.')->group(function () {
-    // Volt::route('tambah-umkm', 'umkm-owner.add-umkm')->name('add-umkm');
-    // Volt::route('umkm-saya', 'umkm-owner.my-umkm')->name('my-umkm');
-    // Volt::route('umkm/saya/{id}', 'umkm-owner.my-umkm-detail')->name('my-umkm.detail');
-});
-
-Route::middleware(['auth', 'type:mentor'])->prefix('mentee')->name('mentee.')->group(function () {
-    // Mentee Routes (for mentors to manage mentoring requests)
-    Route::get('/', [MenteeController::class, 'index'])->name('index');
-    Route::get('sessions/{id}', [MenteeController::class, 'show'])->name('show');
-    Route::post('sessions/{id}/approve', [MenteeController::class, 'approve'])->name('approve');
-    Route::post('sessions/{id}/reject', [MenteeController::class, 'reject'])->name('reject');
-    Route::post('sessions/{id}/complete', [MenteeController::class, 'complete'])->name('complete');
-});
-
-Route::middleware(['auth', 'type:funder'])->prefix('funder')->name('funder.')->group(function () {
-    // Funder Funding Routes (only for verified funders - checked in controller)
-    Route::prefix('funding-requests')->name('funding-requests.')->group(function () {
-        Route::get('/', [FunderFundingController::class, 'index'])->name('index');
-        Route::get('{id}', [FunderFundingController::class, 'show'])->name('show');
-        Route::post('{id}/accept', [FunderFundingController::class, 'accept'])->name('accept');
+    
+    // Multi-role routes - accessible if user has the corresponding profile (checked in controllers)
+    // Mentee Routes (for mentors - check in controller if user has mentor profile)
+    Route::prefix('mentee')->name('mentee.')->group(function () {
+        Route::get('/', [MenteeController::class, 'index'])->name('index');
+        Route::get('sessions/{id}', [MenteeController::class, 'show'])->name('show');
+        Route::post('sessions/{id}/approve', [MenteeController::class, 'approve'])->name('approve');
+        Route::post('sessions/{id}/reject', [MenteeController::class, 'reject'])->name('reject');
+        Route::post('sessions/{id}/complete', [MenteeController::class, 'complete'])->name('complete');
+    });
+    
+    // Funder Funding Routes (for funders - check in controller if user has funder profile)
+    Route::prefix('funder')->name('funder.')->group(function () {
+        Route::prefix('funding-requests')->name('funding-requests.')->group(function () {
+            Route::get('/', [FunderFundingController::class, 'index'])->name('index');
+            Route::get('{id}', [FunderFundingController::class, 'show'])->name('show');
+            Route::post('{id}/accept', [FunderFundingController::class, 'accept'])->name('accept');
+        });
     });
 });
 

@@ -22,7 +22,7 @@ class MenteeController extends Controller
 
         if (!$user->mentor) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai Mentor terlebih dahulu');
+                ->with('error', 'Untuk mengelola mentee, Anda harus terdaftar sebagai Mentor terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         if (!$user->mentor->verified) {

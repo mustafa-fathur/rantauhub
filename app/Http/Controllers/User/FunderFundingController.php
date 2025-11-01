@@ -21,7 +21,7 @@ class FunderFundingController extends Controller
 
         if (!$user->funder) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai Funder terlebih dahulu');
+                ->with('error', 'Untuk memberikan pendanaan, Anda harus terdaftar sebagai Funder terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         if (!$user->funder->verified) {
@@ -100,16 +100,16 @@ class FunderFundingController extends Controller
             'description' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        // Update funding with funder information
+        // Update funding with funder information - langsung approved tanpa perlu verifikasi admin
         $funding->update([
             'funder_id' => $user->funder->id,
             'amount' => $validated['amount'], // Funder can provide different amount
-            'status' => FundingStatus::PENDING, // Change to pending for admin approval
+            'status' => FundingStatus::APPROVED, // Langsung approved, transaksi langsung terjadi
             'description' => $validated['description'] ?? $funding->description,
         ]);
 
         return redirect()->route('funder.funding-requests.index')
-            ->with('success', 'Anda telah menerima request pendanaan! Silakan tunggu persetujuan admin.');
+            ->with('success', 'Anda telah menerima dan menyetujui request pendanaan! Transaksi telah tercatat.');
     }
 }
 

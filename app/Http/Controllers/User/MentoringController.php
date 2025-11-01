@@ -22,7 +22,7 @@ class MentoringController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Untuk request mentoring, Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         // Get all mentoring sessions for this UMKM Owner
@@ -47,7 +47,7 @@ class MentoringController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Untuk request mentoring, Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         // Get verified mentors
@@ -71,7 +71,7 @@ class MentoringController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Untuk request mentoring, Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $validated = $request->validate([
@@ -111,7 +111,7 @@ class MentoringController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Untuk request mentoring, Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $session = MentorSession::with(['mentor.user', 'mentor.skills', 'hoursLog'])
@@ -134,7 +134,7 @@ class MentoringController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Untuk request mentoring, Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $session = MentorSession::with('mentor')
@@ -195,7 +195,7 @@ class MentoringController extends Controller
 
         if (!$user->umkmOwner) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda harus terdaftar sebagai UMKM Owner terlebih dahulu');
+                ->with('error', 'Untuk request mentoring, Anda harus terdaftar sebagai UMKM Owner terlebih dahulu. Silakan daftar di halaman Dashboard.');
         }
 
         $session = MentorSession::where('umkm_owner', $user->umkmOwner->id)

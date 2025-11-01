@@ -2,20 +2,29 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
-        <title>{{ $title ?? config('app.name', 'RantauHub') }}</title>
+        <title>{{ $title ?? 'Auth' }} - {{ config('app.name', 'RantauHub') }}</title>
         @livewireStyles
     </head>
     <body class="min-h-screen">
-        <div class="relative min-h-screen flex items-center justify-center p-6 md:p-12">
-            <!-- Full-bleed background image + overlay -->
-            <img src="{{ asset('assets/images/auth-background.png') }}" alt="Auth Background" class="absolute inset-0 -z-10 w-full h-full object-cover">
-            <div class="absolute inset-0 -z-10 bg-black/30"></div>
-
-            <!-- Slot (auth card) -->
-            <div class="w-full max-w-md">
-                {{ $slot }}
+        <section class="relative min-h-screen">
+            <!-- Background -->
+            <div class="absolute inset-0 -z-10">
+                <img
+                    src="{{ asset('assets/images/auth-background.png') }}"
+                    alt="RantauHub Auth Background"
+                    class="w-full h-full object-cover"
+                >
+                <!-- subtle wash to keep text legible -->
+                <div class="absolute inset-0 bg-white/30"></div>
             </div>
-        </div>
+
+            <!-- Content (align right on md+) -->
+            <div class="container mx-auto px-4 min-h-screen flex items-center justify-center md:justify-end">
+                <div class="w-full max-w-md md:mr-6 lg:mr-12">
+                    {{ $slot }}
+                </div>
+            </div>
+        </section>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireScripts

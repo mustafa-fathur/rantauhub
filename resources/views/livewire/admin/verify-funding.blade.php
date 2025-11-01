@@ -20,24 +20,15 @@ new class extends Component {
             ->latest()
             ->get();
 
-        // Get funding requests that already have funder but waiting for admin approval (PENDING status)
-        $pendingTransfers = Funding::with(['business.owner.user', 'funder.user'])
-            ->where('status', FundingStatus::PENDING)
-            ->latest()
-            ->get();
-
         // Calculate statistics
         $totalPendingRequests = $pendingRequests->count();
-        $totalPendingTransfers = $pendingTransfers->count();
         $totalApproved = Funding::where('status', FundingStatus::APPROVED)->count();
         $totalAmount = Funding::whereIn('status', [FundingStatus::APPROVED, FundingStatus::DISBURSED])->sum('amount');
 
         return [
             'title' => 'Verifikasi Pendanaan',
             'pendingRequests' => $pendingRequests,
-            'pendingTransfers' => $pendingTransfers,
             'totalPendingRequests' => $totalPendingRequests,
-            'totalPendingTransfers' => $totalPendingTransfers,
             'totalApproved' => $totalApproved,
             'totalAmount' => $totalAmount,
         ];
@@ -81,51 +72,11 @@ new class extends Component {
         }
     }
 
-    public function approveTransfer($id): void
+    public function showDetail($id): void
     {
-        $funding = Funding::with('business')->findOrFail($id);
-        
-        if ($funding->status !== FundingStatus::PENDING) {
-            session()->flash('error', 'Hanya transfer dengan status pending yang dapat disetujui.');
-            return;
-        }
-
-        $funding->update(['status' => FundingStatus::APPROVED]);
-
-        session()->flash('success', "Transfer pendanaan untuk '{$funding->business->name}' telah disetujui.");
-    }
-
-    public function rejectTransfer($id): void
-    {
-        $funding = Funding::with('business')->findOrFail($id);
-        
-        if ($funding->status !== FundingStatus::PENDING) {
-            session()->flash('error', 'Hanya transfer dengan status pending yang dapat ditolak.');
-            return;
-        }
-
-        // Reject transfer - remove funder and set back to OPEN
-        $businessName = $funding->business->name;
-        $funding->update([
-            'status' => FundingStatus::OPEN,
-            'funder_id' => null,
-            'proof_of_transfer' => null,
-        ]);
-        
-        session()->flash('info', "Transfer pendanaan untuk '{$businessName}' telah ditolak dan request kembali terbuka.");
-    }
-
-    public function showDetail($id, $type = 'request'): void
-    {
-        if ($type === 'request') {
-            $this->selectedFunding = Funding::with(['business.owner.user'])
-                ->where('status', FundingStatus::OPEN_REQUEST)
-                ->findOrFail($id);
-        } else {
-            $this->selectedFunding = Funding::with(['business.owner.user', 'funder.user'])
-                ->where('status', FundingStatus::PENDING)
-                ->findOrFail($id);
-        }
+        $this->selectedFunding = Funding::with(['business.owner.user'])
+            ->where('status', FundingStatus::OPEN_REQUEST)
+            ->findOrFail($id);
         $this->showDetailModal = true;
     }
 
@@ -140,7 +91,7 @@ new class extends Component {
     <!-- Page Header -->
     <div>
         <h1 class="text-3xl font-bold text-primary">Verifikasi Pendanaan</h1>
-        <p class="text-zinc-600 mt-1">Kelola dan verifikasi request pendanaan dari UMKM</p>
+        <p class="text-zinc-600 mt-1">Verifikasi request pendanaan dari UMKM. Setelah disetujui, request akan terbuka untuk funder dan transaksi akan terjadi langsung antara funder dan UMKM owner.</p>
     </div>
 
     <!-- Statistics -->
@@ -150,10 +101,6 @@ new class extends Component {
             <p class="text-2xl font-bold text-yellow-600">{{ $totalPendingRequests }}</p>
         </div>
         <div class="bg-white rounded-lg p-6 shadow-sm border border-zinc-200">
-            <h3 class="text-sm font-medium text-zinc-600 mb-1">Menunggu Approval Transfer</h3>
-            <p class="text-2xl font-bold text-orange-600">{{ $totalPendingTransfers }}</p>
-        </div>
-        <div class="bg-white rounded-lg p-6 shadow-sm border border-zinc-200">
             <h3 class="text-sm font-medium text-zinc-600 mb-1">Disetujui</h3>
             <p class="text-2xl font-bold text-green-600">{{ $totalApproved }}</p>
         </div>
@@ -161,13 +108,17 @@ new class extends Component {
             <h3 class="text-sm font-medium text-zinc-600 mb-1">Total Nilai</h3>
             <p class="text-2xl font-bold text-primary">Rp {{ number_format($totalAmount, 0, ',', '.') }}</p>
         </div>
+        <div class="bg-white rounded-lg p-6 shadow-sm border border-zinc-200">
+            <h3 class="text-sm font-medium text-zinc-600 mb-1">Total Request</h3>
+            <p class="text-2xl font-bold text-zinc-900">{{ Funding::count() }}</p>
+        </div>
     </div>
 
     <!-- Request Pendanaan Menunggu Verifikasi -->
     <div class="bg-white rounded-lg shadow-sm border border-zinc-200 overflow-hidden">
         <div class="px-6 py-4 border-b border-zinc-200">
             <h2 class="text-lg font-semibold text-primary">Request Pendanaan Menunggu Verifikasi</h2>
-            <p class="text-sm text-zinc-600 mt-1">Verifikasi request pendanaan dari UMKM sebelum dibuka untuk funder</p>
+            <p class="text-sm text-zinc-600 mt-1">Verifikasi request pendanaan dari UMKM. Setelah disetujui, request akan langsung terbuka untuk funder dan transaksi terjadi langsung antara funder dan UMKM owner tanpa perlu verifikasi admin lagi.</p>
         </div>
         
         <div class="p-6 space-y-4">
@@ -223,7 +174,7 @@ new class extends Component {
                             Tolak
                         </button>
                         <button 
-                            wire:click="showDetail({{ $funding->id }}, 'request')"
+                            wire:click="showDetail({{ $funding->id }})"
                             class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition text-sm whitespace-nowrap"
                         >
                             Detail
@@ -239,92 +190,6 @@ new class extends Component {
         </div>
     </div>
 
-    <!-- Transfer Pendanaan Menunggu Approval -->
-    @if($pendingTransfers->count() > 0)
-        <div class="bg-white rounded-lg shadow-sm border border-zinc-200 overflow-hidden">
-            <div class="px-6 py-4 border-b border-zinc-200">
-                <h2 class="text-lg font-semibold text-primary">Transfer Pendanaan Menunggu Approval</h2>
-                <p class="text-sm text-zinc-600 mt-1">Verifikasi bukti transfer dari funder</p>
-            </div>
-            
-            <div class="p-6 space-y-4">
-                @foreach($pendingTransfers as $funding)
-                <div class="border border-zinc-200 rounded-lg p-6 hover:shadow-md transition">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <div class="grid grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <p class="text-xs text-zinc-500 mb-1">Funder</p>
-                                    <p class="text-sm font-semibold text-zinc-900">{{ $funding->funder->user->name }}</p>
-                                    @if($funding->funder->organization_name)
-                                        <p class="text-xs text-zinc-600 mt-1">{{ $funding->funder->organization_name }}</p>
-                                    @endif
-                                </div>
-                                <div>
-                                    <p class="text-xs text-zinc-500 mb-1">UMKM Business</p>
-                                    <p class="text-sm font-semibold text-zinc-900">{{ $funding->business->name }}</p>
-                                    <p class="text-xs text-zinc-600 mt-1">{{ $funding->business->location }}</p>
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-3 gap-6">
-                                <div>
-                                    <p class="text-xs text-zinc-500 mb-1">Jumlah Pendanaan</p>
-                                    <p class="text-lg font-bold text-primary">Rp {{ number_format($funding->amount, 0, ',', '.') }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-zinc-500 mb-1">Status</p>
-                                    <span class="inline-flex px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                                        Pending Approval
-                                    </span>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-zinc-500 mb-1">Tanggal</p>
-                                    <p class="text-sm text-zinc-900">{{ $funding->created_at->format('d M Y H:i') }}</p>
-                                </div>
-                            </div>
-                            
-                            @if($funding->proof_of_transfer)
-                                <div class="mt-4 pt-4 border-t border-zinc-200">
-                                    <p class="text-xs text-zinc-500 mb-2">Bukti Transfer</p>
-                                    <a href="{{ asset('storage/' . $funding->proof_of_transfer) }}" target="_blank" class="inline-flex items-center space-x-2 text-sm text-primary hover:text-primary-600">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                                        </svg>
-                                        <span>Lihat Bukti Transfer</span>
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
-                        
-                        <div class="ml-6 flex flex-col space-y-2">
-                            <button 
-                                wire:click="approveTransfer({{ $funding->id }})"
-                                wire:confirm="Apakah Anda yakin ingin menyetujui transfer pendanaan ini?"
-                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm whitespace-nowrap"
-                            >
-                                Setujui
-                            </button>
-                            <button 
-                                wire:click="rejectTransfer({{ $funding->id }})"
-                                wire:confirm="Apakah Anda yakin ingin menolak transfer pendanaan ini? Request akan kembali terbuka untuk funder lain."
-                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm whitespace-nowrap"
-                            >
-                                Tolak
-                            </button>
-                            <button 
-                                wire:click="showDetail({{ $funding->id }}, 'transfer')"
-                                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition text-sm whitespace-nowrap"
-                            >
-                                Detail
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
 
     <!-- Flash Messages -->
     @if(session()->has('success'))
@@ -455,18 +320,10 @@ new class extends Component {
                         @if($selectedFunding->status === FundingStatus::OPEN_REQUEST)
                             <button 
                                 wire:click="approveRequest({{ $selectedFunding->id }})"
-                                wire:confirm="Apakah Anda yakin ingin menyetujui request pendanaan ini?"
+                                wire:confirm="Apakah Anda yakin ingin menyetujui request pendanaan ini? Request akan langsung terbuka untuk funder dan transaksi akan terjadi langsung antara funder dan UMKM owner."
                                 class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
                             >
                                 Setujui Request
-                            </button>
-                        @elseif($selectedFunding->status === FundingStatus::PENDING)
-                            <button 
-                                wire:click="approveTransfer({{ $selectedFunding->id }})"
-                                wire:confirm="Apakah Anda yakin ingin menyetujui transfer pendanaan ini?"
-                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-                            >
-                                Setujui Transfer
                             </button>
                         @endif
                     </div>
