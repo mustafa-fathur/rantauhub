@@ -5,7 +5,7 @@
             <!-- Logo -->
             <div class="flex items-center space-x-2">
                 <a href="{{ route('home') }}" class="flex items-center space-x-2 hover:opacity-80 transition">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="RantauHub" class="h-10 w-10">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="RantauHub" class="h-14 w-14">
                     <span class="text-xl font-bold text-[#925E25]">RantauHub</span>
                 </a>
             </div>

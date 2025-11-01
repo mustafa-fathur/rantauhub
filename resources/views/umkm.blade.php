@@ -43,9 +43,9 @@
                     </select>
                 </div>
 
-                <!-- Minimum Investasi -->
+                <!-- Minimum Pendanaan -->
                 <div class="bg-gradient-to-r from-primary to-primary-800 text-white px-8 py-5 rounded-lg shadow-md text-center min-w-[220px]">
-                    <p class="text-sm font-medium uppercase tracking-wider">Minimum Investasi</p>
+                    <p class="text-sm font-medium uppercase tracking-wider">Minimum Pendanaan</p>
                     <p class="text-3xl font-bold">Rp 100.000</p>
                 </div>
 

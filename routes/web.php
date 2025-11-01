@@ -16,6 +16,7 @@ use App\Http\Controllers\User\MentoringController;
 use App\Http\Controllers\User\MenteeController;
 use App\Http\Controllers\Public\UmkmController;
 use App\Http\Controllers\Public\MentorController;
+use App\Http\Controllers\Public\ForumController as PublicForumController;
 
 // Main Pages
 
@@ -29,18 +30,12 @@ Route::get('/umkm/{id}', [UmkmController::class, 'show'])->name('umkm.detail');
 Route::get('/mentor', [MentorController::class, 'index'])->name('mentor');
 Route::get('/mentor/{id}', [MentorController::class, 'show'])->name('mentor.detail');
 
-Route::get('/forum', function () {
-    return view('forum');
-})->name('forum');
+Route::get('/forum', [PublicForumController::class, 'index'])->name('forum');
+Route::get('/forum/{id}', [PublicForumController::class, 'show'])->name('forum.detail');
 
 Route::get('/about', function () {
     return view('about');
 })->name('about');
-
-
-Route::get('/forum/detail', function () {
-    return view('forum-detail');
-})->name('forum.detail');
 
 
 // Auth Routes

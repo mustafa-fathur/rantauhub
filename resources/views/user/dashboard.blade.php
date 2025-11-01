@@ -33,7 +33,7 @@
                     <h1 class="text-3xl font-bold mb-2">Selamat Datang, {{ auth()->user()->name }}!</h1>
                     <p class="text-primary-100 mb-2">RANTAU - RANGKAK ANAK NAGARI TUJUH ANDALAS UNGGUL</p>
                     <p class="text-primary-100 text-sm max-w-2xl">
-                        Menghubungkan diaspora Minangkabau dengan UMKM lokal Sumatera Barat melalui investasi, mentorship, dan kolaborasi untuk ekonomi berkelanjutan.
+                        Menghubungkan diaspora Minangkabau dengan UMKM lokal Sumatera Barat melalui penggalangan dana, mentorship, dan kolaborasi untuk ekonomi berkelanjutan.
                     </p>
                 </div>
                 <div class="absolute right-0 top-0 opacity-20">
@@ -67,16 +67,10 @@
                     </div>
                     <h3 class="text-sm font-medium text-zinc-600 mb-1">Total Mentees</h3>
                     <p class="text-2xl font-bold text-zinc-900">
-                        @php
-                            $totalMentees = 0;
-                            if (auth()->user()->mentor) {
-                                $totalMentees = auth()->user()->mentor->sessions()->count();
-                            }
-                        @endphp
-                        @if($totalMentees > 0)
+                        @if(isset($totalMentees) && $totalMentees > 0)
                             {{ $totalMentees }}
                         @else
-                            N/A
+                            0
                         @endif
                     </p>
                 </div>
@@ -89,20 +83,12 @@
                             </svg>
                         </div>
                     </div>
-                    <h3 class="text-sm font-medium text-zinc-600 mb-1">Total Investasi</h3>
+                    <h3 class="text-sm font-medium text-zinc-600 mb-1">Total Pendanaan</h3>
                     <p class="text-2xl font-bold text-zinc-900">
-                        @php
-                            $totalFunding = 0;
-                            if (auth()->user()->umkmOwner) {
-                                $totalFunding = \App\Models\Funding::whereHas('business', function($q) {
-                                    $q->where('owner_id', auth()->user()->umkmOwner->id);
-                                })->where('status', \App\Enums\FundingStatus::APPROVED)->sum('amount');
-                            }
-                        @endphp
-                        @if($totalFunding > 0)
-                            Rp {{ number_format($totalFunding, 0, ',', '.') }}
+                        @if(isset($totalFundingGiven) && $totalFundingGiven > 0)
+                            Rp {{ number_format($totalFundingGiven / 1000000, 1, ',', '.') }} Jt
                         @else
-                            N/A
+                            0
                         @endif
                     </p>
                 </div>
@@ -116,7 +102,7 @@
                         </div>
                     </div>
                     <h3 class="text-sm font-medium text-zinc-600 mb-1">Total Posts</h3>
-                    <p class="text-2xl font-bold text-zinc-900">0</p>
+                    <p class="text-2xl font-bold text-zinc-900">{{ $totalPosts ?? 0 }}</p>
                 </div>
             </div>
 
@@ -140,10 +126,7 @@
                         </div>
                     </div>
                 @else
-                    @php
-                        $userUmkmCount = auth()->user()->umkmOwner->businesses()->count();
-                    @endphp
-                    @if($userUmkmCount > 0)
+                    @if($totalUmkm > 0)
                         <!-- Manage UMKM (if already has UMKM) -->
                         <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 shadow-sm border-2 border-green-200">
                             <div class="flex flex-col items-center text-center">
@@ -153,7 +136,12 @@
                                     </svg>
                                 </div>
                                 <h3 class="text-lg font-semibold text-green-800 mb-2">Kelola UMKM</h3>
-                                <p class="text-sm text-green-700 mb-2">Anda memiliki <span class="font-bold">{{ $userUmkmCount }}</span> UMKM terdaftar</p>
+                                <p class="text-sm text-green-700 mb-2">Anda memiliki <span class="font-bold">{{ $totalUmkm }}</span> UMKM terdaftar</p>
+                                @if($verifiedUmkmCount > 0)
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-green-200 text-green-800 mb-4">
+                                        Terverifikasi
+                                    </span>
+                                @endif
                                 <a href="{{ route('my-umkm.index') }}" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium shadow-md mt-2">
                                     Lihat UMKM Saya
                                 </a>
