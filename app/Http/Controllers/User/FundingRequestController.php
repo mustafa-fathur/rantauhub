@@ -36,17 +36,11 @@ class FundingRequestController extends Controller
         // Get user's businesses
         $businesses = $user->umkmOwner->businesses()->where('verified', true)->get();
 
-        // Get verified funders
-        $funders = Funder::with('user')
-            ->where('verified', true)
-            ->get();
-
         return view('user.funding-requests', [
             'title' => 'Request Pendanaan',
             'user' => $user,
             'fundingRequests' => $fundingRequests,
             'businesses' => $businesses,
-            'funders' => $funders,
         ]);
     }
 
@@ -72,16 +66,10 @@ class FundingRequestController extends Controller
                 ->with('error', 'Anda harus memiliki setidaknya satu UMKM yang sudah terverifikasi untuk membuat request pendanaan');
         }
 
-        // Get verified funders
-        $funders = Funder::with('user')
-            ->where('verified', true)
-            ->get();
-
         return view('user.funding-request-create', [
             'title' => 'Buat Request Pendanaan',
             'user' => $user,
             'businesses' => $businesses,
-            'funders' => $funders,
         ]);
     }
 
@@ -107,27 +95,21 @@ class FundingRequestController extends Controller
                     $fail('UMKM yang dipilih harus sudah terverifikasi.');
                 }
             }],
-            'funder_id' => ['required', 'exists:funders,id', function ($attribute, $value, $fail) {
-                $funder = Funder::find($value);
-                if (!$funder || !$funder->verified) {
-                    $fail('Funder yang dipilih tidak valid atau belum terverifikasi.');
-                }
-            }],
             'amount' => ['required', 'integer', 'min:1000000', 'max:1000000000'], // Min 1 juta, Max 1 milyar
             'description' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        // Create funding request
+        // Create funding request - waiting for admin approval first
         Funding::create([
-            'funder_id' => $validated['funder_id'],
+            'funder_id' => null, // No funder yet
             'business_id' => $validated['business_id'],
             'amount' => $validated['amount'],
-            'status' => FundingStatus::PENDING,
+            'status' => FundingStatus::OPEN_REQUEST, // Status OPEN_REQUEST means waiting for admin approval
             'description' => $validated['description'] ?? null,
         ]);
 
         return redirect()->route('funding-requests.index')
-            ->with('success', 'Request pendanaan berhasil dibuat! Silakan tunggu persetujuan dari funder dan admin.');
+            ->with('success', 'Request pendanaan berhasil dibuat! Request Anda sedang menunggu verifikasi admin terlebih dahulu.');
     }
 
     /**
@@ -173,9 +155,10 @@ class FundingRequestController extends Controller
             })
             ->findOrFail($id);
 
-        if ($funding->status !== FundingStatus::PENDING) {
+        // Only allow canceling OPEN_REQUEST, OPEN, or PENDING requests
+        if (!in_array($funding->status, [FundingStatus::OPEN_REQUEST, FundingStatus::OPEN, FundingStatus::PENDING])) {
             return redirect()->route('funding-requests.index')
-                ->with('error', 'Hanya request yang masih pending yang dapat dibatalkan.');
+                ->with('error', 'Hanya request yang masih menunggu verifikasi, open, atau pending yang dapat dibatalkan.');
         }
 
         $funding->update(['status' => FundingStatus::REJECTED]);

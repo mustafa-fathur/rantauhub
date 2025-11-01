@@ -58,10 +58,18 @@
             @endif
 
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                 <div class="bg-white rounded-lg p-4 shadow-sm border border-zinc-200">
                     <h3 class="text-sm font-medium text-zinc-600 mb-1">Total Request</h3>
                     <p class="text-2xl font-bold text-zinc-900">{{ $fundingRequests->count() }}</p>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow-sm border border-zinc-200">
+                    <h3 class="text-sm font-medium text-zinc-600 mb-1">Menunggu Admin</h3>
+                    <p class="text-2xl font-bold text-yellow-600">{{ $fundingRequests->where('status', \App\Enums\FundingStatus::OPEN_REQUEST)->count() }}</p>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow-sm border border-zinc-200">
+                    <h3 class="text-sm font-medium text-zinc-600 mb-1">Open</h3>
+                    <p class="text-2xl font-bold text-blue-600">{{ $fundingRequests->where('status', \App\Enums\FundingStatus::OPEN)->count() }}</p>
                 </div>
                 <div class="bg-white rounded-lg p-4 shadow-sm border border-zinc-200">
                     <h3 class="text-sm font-medium text-zinc-600 mb-1">Pending</h3>
@@ -70,10 +78,6 @@
                 <div class="bg-white rounded-lg p-4 shadow-sm border border-zinc-200">
                     <h3 class="text-sm font-medium text-zinc-600 mb-1">Disetujui</h3>
                     <p class="text-2xl font-bold text-green-600">{{ $fundingRequests->where('status', \App\Enums\FundingStatus::APPROVED)->count() }}</p>
-                </div>
-                <div class="bg-white rounded-lg p-4 shadow-sm border border-zinc-200">
-                    <h3 class="text-sm font-medium text-zinc-600 mb-1">Total Nilai</h3>
-                    <p class="text-2xl font-bold text-primary">Rp {{ number_format($fundingRequests->sum('amount'), 0, ',', '.') }}</p>
                 </div>
             </div>
 
@@ -85,7 +89,7 @@
                             <thead class="bg-zinc-50 border-b border-zinc-200">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-zinc-700 uppercase tracking-wider">UMKM</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-zinc-700 uppercase tracking-wider">Funder</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-zinc-700 uppercase tracking-wider">Funder / Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-zinc-700 uppercase tracking-wider">Jumlah</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-zinc-700 uppercase tracking-wider">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-zinc-700 uppercase tracking-wider">Tanggal</th>
@@ -100,14 +104,28 @@
                                             <div class="text-xs text-zinc-500">{{ $funding->business->location }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-zinc-900">{{ $funding->funder->user->name }}</div>
-                                            <div class="text-xs text-zinc-500">{{ $funding->funder->organization_name ?? 'Individu' }}</div>
+                                            @if($funding->funder)
+                                                <div class="text-sm text-zinc-900">{{ $funding->funder->user->name }}</div>
+                                                <div class="text-xs text-zinc-500">{{ $funding->funder->organization_name ?? 'Individu' }}</div>
+                                            @else
+                                                <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                                    Menunggu Funder
+                                                </span>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-semibold text-zinc-900">Rp {{ number_format($funding->amount, 0, ',', '.') }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($funding->status === \App\Enums\FundingStatus::PENDING)
+                                            @if($funding->status === \App\Enums\FundingStatus::OPEN_REQUEST)
+                                                <span class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                                    Menunggu Verifikasi Admin
+                                                </span>
+                                            @elseif($funding->status === \App\Enums\FundingStatus::OPEN)
+                                                <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                                    Open
+                                                </span>
+                                            @elseif($funding->status === \App\Enums\FundingStatus::PENDING)
                                                 <span class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
                                                     Pending
                                                 </span>
@@ -120,7 +138,7 @@
                                                     Ditolak
                                                 </span>
                                             @elseif($funding->status === \App\Enums\FundingStatus::DISBURSED)
-                                                <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                                <span class="px-3 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
                                                     Dicairkan
                                                 </span>
                                             @endif
@@ -133,7 +151,7 @@
                                                 <a href="{{ route('funding-requests.show', $funding->id) }}" class="px-3 py-1 bg-primary text-white rounded-lg hover:bg-primary-600 transition text-sm">
                                                     Detail
                                                 </a>
-                                                @if($funding->status === \App\Enums\FundingStatus::PENDING)
+                                                @if(in_array($funding->status, [\App\Enums\FundingStatus::OPEN_REQUEST, \App\Enums\FundingStatus::OPEN, \App\Enums\FundingStatus::PENDING]))
                                                     <form action="{{ route('funding-requests.cancel', $funding->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan request ini?');" class="inline">
                                                         @csrf
                                                         @method('PUT')

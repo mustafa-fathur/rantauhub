@@ -62,19 +62,32 @@
                     </div>
                 </div>
 
-                <!-- Funder Info -->
-                <div class="bg-zinc-50 rounded-lg p-4">
-                    <h3 class="font-semibold text-zinc-900 mb-3">Informasi Funder</h3>
-                    <div class="space-y-2 text-sm">
-                        <p><span class="font-medium">Nama:</span> {{ $funding->funder->user->name }}</p>
-                        <p><span class="font-medium">Email:</span> {{ $funding->funder->user->email }}</p>
-                        @if($funding->funder->organization_name)
-                            <p><span class="font-medium">Organisasi:</span> {{ $funding->funder->organization_name }}</p>
-                        @else
-                            <p><span class="font-medium">Tipe:</span> Individu</p>
-                        @endif
+                <!-- Funder Info (Only if funder exists) -->
+                @if($funding->funder)
+                    <div class="bg-zinc-50 rounded-lg p-4">
+                        <h3 class="font-semibold text-zinc-900 mb-3">Informasi Funder</h3>
+                        <div class="space-y-2 text-sm">
+                            <p><span class="font-medium">Nama:</span> {{ $funding->funder->user->name }}</p>
+                            <p><span class="font-medium">Email:</span> {{ $funding->funder->user->email }}</p>
+                            @if($funding->funder->organization_name)
+                                <p><span class="font-medium">Organisasi:</span> {{ $funding->funder->organization_name }}</p>
+                            @else
+                                <p><span class="font-medium">Tipe:</span> Individu</p>
+                            @endif
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-sm text-blue-800">
+                                <strong>Status:</strong> Request ini masih terbuka dan menunggu funder untuk memberikan pendanaan.
+                            </p>
+                        </div>
+                    </div>
+                @endif
 
                 <!-- Funding Details -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -105,7 +118,7 @@
                 @endif
 
                 <!-- Actions -->
-                @if($funding->status === \App\Enums\FundingStatus::PENDING)
+                @if(in_array($funding->status, [\App\Enums\FundingStatus::OPEN_REQUEST, \App\Enums\FundingStatus::OPEN, \App\Enums\FundingStatus::PENDING]))
                     <div class="pt-6 border-t border-zinc-200">
                         <form action="{{ route('funding-requests.cancel', $funding->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan request ini?');">
                             @csrf

@@ -16,7 +16,7 @@
                     Home
                 </a>
                 <a href="{{ route('umkm') }}" class="font-medium transition {{ request()->routeIs('umkm') || request()->routeIs('umkm.*') ? 'text-primary underline' : 'text-[#925E25] hover:text-primary' }}">
-                    UMKM
+                    Pendanaan UMKM
                 </a>
                 <a href="{{ route('mentor') }}" class="font-medium transition {{ request()->routeIs('mentor') || request()->routeIs('mentor.*') ? 'text-primary underline' : 'text-[#925E25] hover:text-primary' }}">
                     Mentor

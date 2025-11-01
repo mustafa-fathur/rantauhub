@@ -11,6 +11,9 @@ use App\Http\Controllers\User\MyUmkmController;
 use App\Http\Controllers\User\FundingRequestController;
 use App\Http\Controllers\User\MentorRegistrationController;
 use App\Http\Controllers\User\FunderRegistrationController;
+use App\Http\Controllers\User\FunderFundingController;
+use App\Http\Controllers\User\MentoringController;
+use App\Http\Controllers\User\MenteeController;
 
 // Main Pages
 
@@ -85,6 +88,16 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
         Route::get('funding-requests/{id}', [FundingRequestController::class, 'show'])->name('show');
         Route::put('funding-requests/{id}/cancel', [FundingRequestController::class, 'cancel'])->name('cancel');
     });
+    
+    // Mentoring Routes (only for UMKM Owners)
+    Route::middleware(['auth', 'type:umkm_owner'])->prefix('user')->name('mentoring.')->group(function () {
+        Route::get('mentoring', [MentoringController::class, 'index'])->name('index');
+        Route::get('mentoring/create', [MentoringController::class, 'create'])->name('create');
+        Route::post('mentoring', [MentoringController::class, 'store'])->name('store');
+        Route::get('mentoring/{id}', [MentoringController::class, 'show'])->name('show');
+        Route::post('mentoring/{id}/rate', [MentoringController::class, 'rate'])->name('rate');
+        Route::delete('mentoring/{id}', [MentoringController::class, 'cancel'])->name('cancel');
+    });
 });
 
 // User type specific routes
@@ -94,14 +107,22 @@ Route::middleware(['auth', 'type:umkm_owner'])->prefix('umkm')->name('umkm.')->g
     // Volt::route('umkm/saya/{id}', 'umkm-owner.my-umkm-detail')->name('my-umkm.detail');
 });
 
-Route::middleware(['auth', 'type:mentor'])->prefix('mentor')->name('mentor.')->group(function () {
-    // Example Mentor routes
-    // Volt::route('mentoring', 'mentor.mentoring')->name('mentoring');
+Route::middleware(['auth', 'type:mentor'])->prefix('mentee')->name('mentee.')->group(function () {
+    // Mentee Routes (for mentors to manage mentoring requests)
+    Route::get('/', [MenteeController::class, 'index'])->name('index');
+    Route::get('sessions/{id}', [MenteeController::class, 'show'])->name('show');
+    Route::post('sessions/{id}/approve', [MenteeController::class, 'approve'])->name('approve');
+    Route::post('sessions/{id}/reject', [MenteeController::class, 'reject'])->name('reject');
+    Route::post('sessions/{id}/complete', [MenteeController::class, 'complete'])->name('complete');
 });
 
 Route::middleware(['auth', 'type:funder'])->prefix('funder')->name('funder.')->group(function () {
-    // Example Funder routes
-    // Volt::route('pendanaan', 'funder.funding')->name('funding');
+    // Funder Funding Routes (only for verified funders - checked in controller)
+    Route::prefix('funding-requests')->name('funding-requests.')->group(function () {
+        Route::get('/', [FunderFundingController::class, 'index'])->name('index');
+        Route::get('{id}', [FunderFundingController::class, 'show'])->name('show');
+        Route::post('{id}/accept', [FunderFundingController::class, 'accept'])->name('accept');
+    });
 });
 
 // Volt sheep

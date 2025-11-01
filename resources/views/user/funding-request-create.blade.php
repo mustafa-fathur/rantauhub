@@ -32,7 +32,7 @@
                     <!-- Information Alert -->
                     <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                         <p class="text-sm text-blue-800">
-                            <strong>Informasi:</strong> Request pendanaan akan ditinjau oleh funder dan admin. Pastikan UMKM Anda sudah terverifikasi sebelum membuat request.
+                            <strong>Informasi:</strong> Request pendanaan akan dipublikasikan dan terbuka untuk semua funder. Funder yang tertarik akan secara sukarela memberikan pendanaan kepada UMKM Anda. Pastikan UMKM Anda sudah terverifikasi sebelum membuat request.
                         </p>
                     </div>
 
@@ -51,41 +51,11 @@
                             @foreach($businesses as $business)
                                 <option value="{{ $business->id }}" {{ old('business_id') == $business->id ? 'selected' : '' }}>
                                     {{ $business->name }} - {{ $business->location }}
-                                    @if(!$business->verified)
-                                        (Belum Terverifikasi)
-                                    @endif
                                 </option>
                             @endforeach
                         </select>
                         <p class="mt-1 text-xs text-zinc-500">Hanya UMKM yang sudah terverifikasi yang dapat menerima pendanaan</p>
                         @error('business_id')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Funder Selection -->
-                    <div>
-                        <label for="funder_id" class="block text-sm font-medium text-zinc-700 mb-2">
-                            Pilih Funder <span class="text-red-500">*</span>
-                        </label>
-                        <select
-                            name="funder_id"
-                            id="funder_id"
-                            required
-                            class="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-primary focus:border-primary transition"
-                        >
-                            <option value="">Pilih Funder</option>
-                            @foreach($funders as $funder)
-                                <option value="{{ $funder->id }}" {{ old('funder_id') == $funder->id ? 'selected' : '' }}>
-                                    {{ $funder->user->name }}
-                                    @if($funder->organization_name)
-                                        - {{ $funder->organization_name }}
-                                    @endif
-                                </option>
-                            @endforeach
-                        </select>
-                        <p class="mt-1 text-xs text-zinc-500">Hanya funder yang sudah terverifikasi yang tersedia</p>
-                        @error('funder_id')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -107,7 +77,7 @@
                             placeholder="Contoh: 50000000"
                             class="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-primary focus:border-primary transition"
                         >
-                        <p class="mt-1 text-xs text-zinc-500">Minimum: Rp 1.000.000 | Maksimum: Rp 1.000.000.000</p>
+                        <p class="mt-1 text-xs text-zinc-500">Minimum: Rp 1.000.000 | Maksimum: Rp 100.000.000</p>
                         <div id="amount-display" class="mt-2 text-sm font-semibold text-primary"></div>
                         @error('amount')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

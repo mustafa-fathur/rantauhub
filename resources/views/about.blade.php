@@ -95,7 +95,7 @@
                                 ['name' => 'Mustafa Fathur Rahman', 'role' => 'Project Manager', 'image' => 'https://randomuser.me/api/portraits/men/32.jpg'],
                                 ['name' => 'Kezia Valerina Damanik', 'role' => 'UI/UX Designer', 'image' => 'https://randomuser.me/api/portraits/women/68.jpg'],
                                 ['name' => 'Rahil Akram Hammad', 'role' => 'Head of Community', 'image' => 'https://randomuser.me/api/portraits/men/45.jpg'],
-                                ['name' => 'Nayla Thahira Meldian', 'role' => 'UI/UX Designer', 'image' => 'https://randomuser.me/api/portraits/women/12.jpg'],
+                                ['name' => 'Nayla Thahira Meldian   ', 'role' => 'UI/UX Designer', 'image' => 'https://randomuser.me/api/portraits/women/12.jpg'],
                                 ['name' => 'Revin Pahlevi', 'role' => 'Lead Developer', 'image' => 'https://randomuser.me/api/portraits/men/75.jpg'],
                             ];
                         @endphp
