@@ -78,6 +78,9 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireScripts
+        
+        <!-- Login Modal (available on all pages) -->
+        @include('components.modals.login')
     </body>
 </html>
 

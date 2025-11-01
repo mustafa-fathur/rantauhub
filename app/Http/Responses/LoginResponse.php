@@ -22,6 +22,25 @@ class LoginResponse implements LoginResponseContract
             return redirect()->route('home');
         }
 
+        // Check if redirect parameter exists (from modal login)
+        $redirect = $request->input('redirect');
+        if ($redirect) {
+            // Handle both absolute and relative URLs
+            if (filter_var($redirect, FILTER_VALIDATE_URL)) {
+                // Validate that redirect is within our domain for security
+                $parsedUrl = parse_url($redirect);
+                $appUrl = parse_url(config('app.url'));
+                
+                if (($parsedUrl['host'] ?? '') === ($appUrl['host'] ?? '') || 
+                    ($parsedUrl['host'] ?? '') === request()->getHost()) {
+                    return redirect($redirect);
+                }
+            } else {
+                // Relative URL - redirect directly (Laravel will handle security)
+                return redirect($redirect);
+            }
+        }
+
         // Redirect based on role
         return match ($user->role) {
             UserRole::ADMIN => redirect()->route('admin.dashboard'),

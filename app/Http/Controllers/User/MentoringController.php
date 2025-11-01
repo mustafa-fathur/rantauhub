@@ -55,10 +55,14 @@ class MentoringController extends Controller
             ->where('verified', true)
             ->get();
 
+        // Check if mentor_id is provided in query (from mentor detail page)
+        $selectedMentorId = request()->get('mentor_id');
+
         return view('user.mentoring-request-create', [
             'title' => 'Request Mentoring',
             'user' => $user,
             'mentors' => $mentors,
+            'selectedMentorId' => $selectedMentorId,
         ]);
     }
 

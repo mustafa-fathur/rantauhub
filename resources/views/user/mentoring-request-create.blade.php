@@ -49,7 +49,7 @@
                         >
                             <option value="">Pilih Mentor</option>
                             @foreach($mentors as $mentor)
-                                <option value="{{ $mentor->id }}" {{ old('mentor_id') == $mentor->id ? 'selected' : '' }}>
+                                <option value="{{ $mentor->id }}" {{ (old('mentor_id') ?? ($selectedMentorId ?? '')) == $mentor->id ? 'selected' : '' }}>
                                     {{ $mentor->user->name }}
                                     @if($mentor->current_job)
                                         - {{ $mentor->current_job }}

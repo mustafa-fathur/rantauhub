@@ -63,8 +63,8 @@ class MentorController extends Controller
 
         // Get top mentors (by reputation and completed sessions)
         $topMentors = $mentors->sortByDesc(function ($mentor) {
-            return ($mentor->reputation_score ?? 0) * 100 + $mentor->stats['completed_sessions'];
-        })->take(5);
+            return ($mentor->stats['reputation_score'] ?? 0) * 100 + ($mentor->stats['completed_sessions'] ?? 0);
+        })->take(5)->values();
 
         // Get unique skills for filter
         $availableSkills = MentorSkill::distinct('skill')->pluck('skill')->toArray();
@@ -97,6 +97,16 @@ class MentorController extends Controller
             ->count();
 
         $totalHours = $mentor->hoursLogs()->sum('hours_contributed');
+
+        // Get unique skills
+        $skills = $mentor->skills->pluck('skill')->toArray();
+
+        // Add stats to mentor object
+        $mentor->stats = [
+            'completed_sessions' => $completedSessions,
+            'reputation_score' => $mentor->reputation_score ?? 0,
+            'skills' => $skills,
+        ];
 
         return view('mentor-detail', [
             'mentor' => $mentor,

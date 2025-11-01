@@ -2,49 +2,12 @@
     <!-- Hero Section -->
     <section class="relative h-[600px] md:h-[700px] flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
-        <div class="absolute inset-0 z-0">
-            <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Background" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/50"></div>
+        <a href="/register">
+            <div class="absolute inset-0 z-0">
+            <img src="{{ asset(path: 'assets/images/home-hero.png') }}" alt="Hero Background" class="w-full h-full object-cover">
+            <div class="absolute inset-0"></div>
         </div>
-
-        <!-- Content -->
-        <div class="relative z-10 container mx-auto px-4 text-center">
-            <!-- Logo Overlay (Right Side) -->
-            <div class="absolute right-8 top-8 md:right-16 md:top-16 opacity-20">
-                <div class="flex items-center space-x-2">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="RantauHub" class="h-16 w-16 md:h-24 md:w-24">
-                    <span class="text-4xl md:text-6xl font-bold text-primary">RANTAU</span>
-                </div>
-            </div>
-
-            <!-- Main Title -->
-            <h1 class="text-5xl md:text-7xl font-bold text-white mb-4">RantauHub</h1>
-
-            <!-- Subtitle 1 -->
-            <div class="inline-block mb-4">
-                <p class="bg-primary text-white px-6 py-2 rounded-lg text-lg md:text-xl font-bold">
-                    Rangkak Anak Nagari Tuju Andalas Unggul
-                </p>
-            </div>
-
-            <!-- Subtitle 2 -->
-            <p class="text-white text-xl md:text-2xl mb-6">
-                Smart Solution for West Sumatra Sustainability
-            </p>
-
-            <!-- Description -->
-            <p class="text-white text-sm md:text-base max-w-2xl mx-auto mb-8">
-                Menghubungkan diaspora Minangkabau dengan UMKM lokal Sumatera Barat melalui investasi, mentorship, dan kolaborasi untuk ekonomi berkelanjutan.
-            </p>
-
-            <!-- CTA Button -->
-            <a href="{{ route('register') }}" class="inline-flex items-center space-x-2 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-600 transition">
-                <span>Daftar Sekarang</span>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </a>
-        </div>
+        </a>
     </section>
 
     <!-- Statistik Singkat -->

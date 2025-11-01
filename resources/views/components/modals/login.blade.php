@@ -1,11 +1,11 @@
 <!-- Login Modal -->
-<div id="loginModal" class="hidden fixed inset-0 z-50 overflow-y-auto" x-data="{ show: false }" x-show="show" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+<div id="loginModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <!-- Backdrop -->
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeLoginModal()"></div>
         
         <!-- Modal -->
-        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 transform transition-all" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 transform transition-all animate-modal-in">
             <!-- Close Button -->
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,16 +104,32 @@
     </div>
 </div>
 
+<style>
+    @keyframes modal-in {
+        from {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    .animate-modal-in {
+        animation: modal-in 0.3s ease-out;
+    }
+</style>
+
 <script>
     function showLoginModal(redirectUrl = null) {
         const modal = document.getElementById('loginModal');
         if (redirectUrl) {
-            document.getElementById('loginRedirect').value = redirectUrl;
+            const redirectInput = document.getElementById('loginRedirect');
+            if (redirectInput) {
+                redirectInput.value = redirectUrl;
+            }
         }
         modal.classList.remove('hidden');
-        if (modal.__x) {
-            modal.__x.$data.show = true;
-        }
         // Focus on email input
         setTimeout(() => {
             document.getElementById('modalEmail')?.focus();
@@ -123,16 +139,15 @@
     function closeLoginModal() {
         const modal = document.getElementById('loginModal');
         modal.classList.add('hidden');
-        if (modal.__x) {
-            modal.__x.$data.show = false;
-        }
     }
 
     // Close on ESC key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            closeLoginModal();
+            const modal = document.getElementById('loginModal');
+            if (!modal.classList.contains('hidden')) {
+                closeLoginModal();
+            }
         }
     });
 </script>
-
