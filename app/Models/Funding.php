@@ -17,6 +17,7 @@ class Funding extends Model
         'funder_id',
         'business_id',
         'amount',
+        'description',
         'proof_of_transfer',
         'status',
     ];

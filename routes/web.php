@@ -8,6 +8,9 @@ use App\Http\Controllers\User\ForumController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\MyUmkmController;
+use App\Http\Controllers\User\FundingRequestController;
+use App\Http\Controllers\User\MentorRegistrationController;
+use App\Http\Controllers\User\FunderRegistrationController;
 
 // Main Pages
 
@@ -54,12 +57,16 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('user/profile', [ProfileController::class, 'index'])->name('my-profile');
     Route::put('user/profile', [ProfileController::class, 'update'])->name('my-profile.update');
     
-    // UMKM Registration Routes
+    // Registration Routes (UMKM, Mentor & Funder)
     Route::prefix('register')->name('register.')->group(function () {
         Route::get('umkm-owner', [RegisterController::class, 'showUmkmOwnerForm'])->name('umkm-owner');
         Route::post('umkm-owner', [RegisterController::class, 'storeUmkmOwner'])->name('umkm-owner.store');
         Route::get('umkm-business', [RegisterController::class, 'showUmkmBusinessForm'])->name('umkm-business');
         Route::post('umkm-business', [RegisterController::class, 'storeUmkmBusiness'])->name('umkm-business.store');
+        Route::get('mentor', [MentorRegistrationController::class, 'showForm'])->name('mentor');
+        Route::post('mentor', [MentorRegistrationController::class, 'store'])->name('mentor.store');
+        Route::get('funder', [FunderRegistrationController::class, 'showForm'])->name('funder');
+        Route::post('funder', [FunderRegistrationController::class, 'store'])->name('funder.store');
     });
     
     // UMKM Management Routes (only for UMKM Owners)
@@ -68,6 +75,15 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
         Route::get('umkm-saya/{id}/edit', [MyUmkmController::class, 'edit'])->name('edit');
         Route::put('umkm-saya/{id}', [MyUmkmController::class, 'update'])->name('update');
         Route::delete('umkm-saya/{id}', [MyUmkmController::class, 'destroy'])->name('destroy');
+    });
+    
+    // Funding Request Routes (only for UMKM Owners)
+    Route::middleware(['auth', 'type:umkm_owner'])->prefix('user')->name('funding-requests.')->group(function () {
+        Route::get('funding-requests', [FundingRequestController::class, 'index'])->name('index');
+        Route::get('funding-requests/create', [FundingRequestController::class, 'create'])->name('create');
+        Route::post('funding-requests', [FundingRequestController::class, 'store'])->name('store');
+        Route::get('funding-requests/{id}', [FundingRequestController::class, 'show'])->name('show');
+        Route::put('funding-requests/{id}/cancel', [FundingRequestController::class, 'cancel'])->name('cancel');
     });
 });
 

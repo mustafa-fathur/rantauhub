@@ -106,5 +106,14 @@
                 Masuk
             </a>
         </div>
+        <!-- Back to Home Button -->
+        <div class="mt-6 text-center">
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Kembali ke Beranda
+            </a>
+        </div>
     </div>
 </x-layouts.auth.rantauhub>

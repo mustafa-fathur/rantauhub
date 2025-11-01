@@ -53,7 +53,7 @@
 
                             @foreach($topMentors as $index => $mentor)
                                 <div class="flex items-center space-x-3">
-                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 text-white flex items-center justify-center font-bold text-sm shadow-md">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold text-sm shadow-md">
                                         {{ $index + 1 }}
                                     </div>
                                     <img src="{{ $mentor['image'] }}" alt="{{ $mentor['name'] }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow">
@@ -120,7 +120,7 @@
                                             <h3 class="font-bold text-lg text-primary">{{ $mentor['name'] }}</h3>
                                             <p class="text-sm text-zinc-600">{{ $mentor['location'] }}</p>
                                             <div class="flex items-center space-x-1 mt-1">
-                                                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-5 h-5 text-secondary" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c..3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                                 </svg>
                                                 <span class="font-semibold text-primary">{{ $mentor['rating'] }}</span>
@@ -136,7 +136,7 @@
                                 <!-- Skills -->
                                 <div class="flex flex-wrap gap-2 mb-4">
                                     @foreach($mentor['skills'] as $skill)
-                                        <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">
+                                        <span class="px-3 py-1 bg-secondary/10 text-secondary text-xs font-medium rounded-full">
                                             {{ $skill }}
                                         </span>
                                     @endforeach
@@ -157,7 +157,7 @@
 
                                 <!-- Favorite Icon (Centered Below Card) -->
                                 <div class="flex justify-center mt-4">
-                                    <button class="text-yellow-500 hover:text-yellow-600 transition">
+                                    <button class="text-secondary hover:opacity-80 transition">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.974 2.89a1 1 0 00-.364 1.118l1.52 4.674c.3.921-.755 1.688-1.54 1.118l-3.975-2.89a1 1 0 00-1.175 0l-3.974 2.89c-.784.57-1.838-.197-1.54-1.118l1.52-4.674a1 1 0 00-.364-1.118l-3.975-2.89c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
                                         </svg>

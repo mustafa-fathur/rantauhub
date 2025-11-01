@@ -10,7 +10,7 @@
         <div class="relative z-10 container mx-auto px-4 text-center">
             <h1 class="text-5xl md:text-7xl font-bold text-white mb-4">RantauHub</h1>
             <div class="inline-block mb-4">
-                <p class="bg-yellow-500 text-primary px-6 py-2 rounded-full text-lg md:text-xl font-bold">
+                <p class="bg-primary text-white px-6 py-2 rounded-full text-lg md:text-xl font-bold">
                     Rangkak Anak Nagari Tuju Andalas Unggul
                 </p>
             </div>
@@ -18,7 +18,7 @@
             <p class="text-white text-sm md:text-base max-w-2xl mx-auto mb-8">
                 Menghubungkan diaspora Minangkabau dengan UMKM lokal Sumatera Barat melalui investasi, mentorship, dan kolaborasi untuk ekonomi berkelanjutan.
             </p>
-            <a href="#" class="inline-flex items-center space-x-2 bg-yellow-500 text-primary px-8 py-3 rounded-full font-semibold hover:bg-yellow-600 transition">
+            <a href="#" class="inline-flex items-center space-x-2 bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-primary-600 transition">
                 <span>Daftar Sekarang</span>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -35,7 +35,7 @@
             <div class="flex flex-col lg:flex-row gap-6 items-center justify-between">
                 <!-- Kategori -->
                 <div class="w-full lg:w-64">
-                    <select class="w-full px-4 py-3 border border-zinc-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <select class="w-full px-4 py-3 border border-zinc-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-secondary">
                         <option>Semua Kategori</option>
                         <option>Kuliner</option>
                         <option>Kerajinan</option>
@@ -46,7 +46,7 @@
 
                 <!-- Sort -->
                 <div class="w-full lg:w-64">
-                    <select class="w-full px-4 py-3 border border-zinc-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <select class="w-full px-4 py-3 border border-zinc-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-secondary">
                         <option>Paling Trending</option>
                         <option>Terbaru</option>
                         <option>Progres Tertinggi</option>
@@ -158,7 +158,7 @@
                                     <span class="text-primary font-bold">{{ $umkm['percentage'] }}%</span>
                                 </div>
                                 <div class="w-full bg-zinc-200 rounded-full h-2">
-                                    <div class="bg-yellow-500 h-2 rounded-full transition-all duration-500"
+                                    <div class="bg-secondary h-2 rounded-full transition-all duration-500"
                                          style="width: {{ $umkm['percentage'] }}%"></div>
                                 </div>
                             </div>

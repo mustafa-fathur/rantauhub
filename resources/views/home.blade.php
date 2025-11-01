@@ -13,18 +13,16 @@
             <div class="absolute right-8 top-8 md:right-16 md:top-16 opacity-20">
                 <div class="flex items-center space-x-2">
                     <img src="{{ asset('assets/images/logo.png') }}" alt="RantauHub" class="h-16 w-16 md:h-24 md:w-24">
-                    <span class="text-4xl md:text-6xl font-bold text-secondary">RANTAU</span>
+                    <span class="text-4xl md:text-6xl font-bold text-primary">RANTAU</span>
                 </div>
             </div>
 
             <!-- Main Title -->
-            <h1 class="text-5xl md:text-7xl font-bold text-secondary mb-4">
-                RantauHub
-            </h1>
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-4">RantauHub</h1>
 
             <!-- Subtitle 1 -->
             <div class="inline-block mb-4">
-                <p class="bg-secondary text-primary px-6 py-2 rounded-lg text-lg md:text-xl font-bold">
+                <p class="bg-primary text-white px-6 py-2 rounded-lg text-lg md:text-xl font-bold">
                     Rangkak Anak Nagari Tuju Andalas Unggul
                 </p>
             </div>
@@ -40,7 +38,7 @@
             </p>
 
             <!-- CTA Button -->
-            <a href="{{ route('register') }}" class="inline-flex items-center space-x-2 bg-accent text-primary px-8 py-3 rounded-lg font-semibold hover:bg-accent-600 transition">
+            <a href="{{ route('register') }}" class="inline-flex items-center space-x-2 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-600 transition">
                 <span>Daftar Sekarang</span>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -58,7 +56,7 @@
                     <h2 class="text-3xl md:text-4xl font-bold text-primary mb-2">Investasi UMKM</h2>
                     <p class="text-zinc-600">Para ahli diaspora siap membimbing UMKM Anda</p>
                 </div>
-                <a href="#" class="flex items-center space-x-2 text-primary hover:text-primary-600 transition">
+                <a href="/umkm" class="flex items-center space-x-2 text-primary hover:text-primary-600 transition">
                     <span>Lihat Semua</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -109,7 +107,7 @@
                             </svg>
                             <span>21 Investor</span>
                         </div>
-                        <a href="#" class="block w-full bg-primary text-white text-center py-2 rounded-lg hover:bg-primary-600 transition font-semibold">
+                        <a href="/mentor" class="block w-full bg-primary text-white text-center py-2 rounded-lg hover:bg-primary-600 transition font-semibold">
                             Lihat Detail
                         </a>
                     </div>

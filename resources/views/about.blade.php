@@ -9,9 +9,9 @@
             <!-- Visi & Misi -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
                 <!-- Visi -->
-                <div class="bg-gradient-to-br from-yellow-50 to-amber-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <div class="bg-gradient-to-br from-secondary/10 to-secondary/5 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
                     <div class="flex items-center mb-4">
-                        <div class="bg-yellow-500 p-3 rounded-xl mr-4 shadow-md">
+                        <div class="bg-secondary p-3 rounded-xl mr-4 shadow-md">
                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -92,11 +92,11 @@
                     <div class="flex flex-wrap justify-center gap-8 md:gap-12">
                         @php
                             $team = [
-                                ['name' => 'Dr. Ahmad Fauzi', 'role' => 'Founder & CEO', 'image' => 'https://randomuser.me/api/portraits/men/32.jpg'],
-                                ['name' => 'Siti Nurhaliza', 'role' => 'Chief Operating Officer', 'image' => 'https://randomuser.me/api/portraits/women/68.jpg'],
-                                ['name' => 'Bayu Andrawati', 'role' => 'Head of Community', 'image' => 'https://randomuser.me/api/portraits/men/45.jpg'],
-                                ['name' => 'Rina Sari', 'role' => 'Lead Developer', 'image' => 'https://randomuser.me/api/portraits/women/12.jpg'],
-                                ['name' => 'Dedi Wijaya', 'role' => 'UX Designer', 'image' => 'https://randomuser.me/api/portraits/men/75.jpg'],
+                                ['name' => 'Mustafa Fathur Rahman', 'role' => 'Project Manager', 'image' => 'https://randomuser.me/api/portraits/men/32.jpg'],
+                                ['name' => 'Kezia Valerina Damanik', 'role' => 'UI/UX Designer', 'image' => 'https://randomuser.me/api/portraits/women/68.jpg'],
+                                ['name' => 'Rahil Akram Hammad', 'role' => 'Head of Community', 'image' => 'https://randomuser.me/api/portraits/men/45.jpg'],
+                                ['name' => 'Nayla Thahira Meldian', 'role' => 'UI/UX Designer', 'image' => 'https://randomuser.me/api/portraits/women/12.jpg'],
+                                ['name' => 'Revin Pahlevi', 'role' => 'Lead Developer', 'image' => 'https://randomuser.me/api/portraits/men/75.jpg'],
                             ];
                         @endphp
 
@@ -106,7 +106,7 @@
                                     <img src="{{ $member['image'] }}" alt="{{ $member['name'] }}" class="w-full h-full object-cover">
                                 </div>
                                 <h4 class="text-white font-bold text-lg">{{ $member['name'] }}</h4>
-                                <p class="text-yellow-300 text-sm">{{ $member['role'] }}</p>
+                                <p class="text-secondary text-sm">{{ $member['role'] }}</p>
                             </div>
                         @endforeach
                     </div>
