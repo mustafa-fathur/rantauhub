@@ -175,7 +175,7 @@
                             </div>
 
                             <!-- CTA -->
-                            <a href="#"
+                            <a href="/umkm/detail"
                                class="block w-full bg-primary text-white text-center py-2.5 rounded-lg font-semibold hover:bg-primary-700 transition text-sm">
                                 Lihat Detail
                             </a>
