@@ -32,15 +32,15 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
-Route::get('/umkm/{id}', function ($id) {
+Route::get('/umkm/detail', function ($id) {
     return view('umkm-detail', ['id' => $id]);
 })->name('umkm.detail');
 
-Route::get('/mentor/{id}', function ($id) {
+Route::get('/mentor/detail', function ($id) {
     return view('mentor-detail', ['id' => $id]);
 })->name('mentor.detail');
 
-Route::get('/forum/{id}', function ($id) {
+Route::get('/forum/detail', function ($id) {
     return view('forum-detail', ['id' => $id]);
 })->name('forum.detail');
 
@@ -74,20 +74,21 @@ Route::middleware(['auth', 'type:funder'])->prefix('funder')->name('funder.')->g
 // Volt sheep
 
 // Admin routes - only accessible by admin role
-Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Volt::route('dashboard', 'admin.dashboard')->name('dashboard');
-    // Other admin routes
-    // Volt::route('verifikasi-umkm', 'admin.verify-umkm')->name('verify-umkm');
-    // Volt::route('verifikasi-mentor', 'admin.verify-mentor')->name('verify-mentor');
-    // Volt::route('verifikasi-funder', 'admin.verify-funder')->name('verify-funder');
-    // Volt::route('kategori-forum', 'admin.forum-category')->name('forum-category');
-    // Volt::route('verifikasi-pendanaan', 'admin.verify-funding')->name('verify-funding');
-}); 
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    // Admin Dashboard (with prefix)
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Volt::route('dashboard', 'admin.dashboard')->name('dashboard');
+        // Other admin routes
+        // Volt::route('verifikasi-umkm', 'admin.verify-umkm')->name('verify-umkm');
+        // Volt::route('verifikasi-mentor', 'admin.verify-mentor')->name('verify-mentor');
+        // Volt::route('verifikasi-funder', 'admin.verify-funder')->name('verify-funder');
+        // Volt::route('kategori-forum', 'admin.forum-category')->name('forum-category');
+        // Volt::route('verifikasi-pendanaan', 'admin.verify-funding')->name('verify-funding');
+    });
 
-// Regular authenticated routes
-Route::middleware(['auth'])->group(function () {
+
+    // Admin Settings (using default Laravel Starter Kit layout)
     Route::redirect('settings', 'settings/profile');
-
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('user-password.edit');
     Volt::route('settings/appearance', 'settings.appearance')->name('appearance.edit');
@@ -102,11 +103,4 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
-});
-
-// Optional
-// Government routes - only accessible by government role
-Route::middleware(['auth', 'role:government'])->prefix('government')->name('government.')->group(function () {
-    // Example government routes
-    // Volt::route('dashboard', 'government.dashboard')->name('dashboard');
-});
+}); 

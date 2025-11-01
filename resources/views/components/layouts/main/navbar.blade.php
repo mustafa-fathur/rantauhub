@@ -37,10 +37,11 @@
                                     <p class="text-sm font-semibold text-zinc-900">{{ auth()->user()->name }}</p>
                                     <p class="text-xs text-zinc-600">{{ auth()->user()->email }}</p>
                                 </div>
-                                <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded">Dashboard</a>
-                                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded">Profile</a>
                                 @if(auth()->user()->isAdmin())
-                                    <a href="#" class="block px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded">Admin Panel</a>
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded">Admin Dashboard</a>
+                                    <a href="{{ route('profile.edit') }}" class="block px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded">Settings</a>
+                                @else
+                                    <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded">Dashboard</a>
                                 @endif
                                 <div class="border-t border-zinc-200 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}">
