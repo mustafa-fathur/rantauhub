@@ -5,8 +5,12 @@ use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
 Route::get('/', function () {
-    return view('livewire.home');
+    return view('livewire.main.home');
 })->name('home');
+
+Route::get('/about', function () {
+    return view('livewire.main.about');
+})->name('about');
 
 
 

@@ -12,21 +12,21 @@ export default {
         themes: [
             {
                 rantauhub: {
-                    "primary": "#122937",        // Dark blue/teal - main brand color
-                    "primary-content": "#ffffff", // White text on primary
-                    "secondary": "#CEA761",       // Gold - accent color for highlights
-                    "secondary-content": "#122937", // Dark text on secondary
-                    "accent": "#925E25",          // Darker gold - tertiary color
-                    "accent-content": "#ffffff",   // White text on accent
-                    "neutral": "#3d4451",          // Default neutral
-                    "base-100": "#ffffff",        // White background
-                    "base-200": "#f2f2f2",        // Light gray background
-                    "base-300": "#e5e6e6",        // Medium gray background
-                    "base-content": "#1f2937",     // Dark text color
-                    "info": "#3abff8",            // Info color
-                    "success": "#36d399",         // Success color
-                    "warning": "#fbbd23",         // Warning color
-                    "error": "#f87272",           // Error color
+                    "primary": "hsl(204, 52%, 15%)",        // Dark blue/teal - main brand color (#122937)
+                    "primary-content": "hsl(0, 0%, 100%)", // White text on primary
+                    "secondary": "hsl(38, 51%, 59%)",       // Gold - accent color for highlights (#CEA761)
+                    "secondary-content": "hsl(204, 52%, 15%)", // Dark blue text on secondary
+                    "accent": "hsl(28, 60%, 36%)",          // Darker gold - tertiary color (#925E25)
+                    "accent-content": "hsl(0, 0%, 100%)",   // White text on accent
+                    "neutral": "hsl(220, 14%, 28%)",          // Default neutral (#3d4451)
+                    "base-100": "hsl(0, 0%, 100%)",        // White background
+                    "base-200": "hsl(0, 0%, 95%)",        // Light gray background
+                    "base-300": "hsl(0, 0%, 90%)",        // Medium gray background
+                    "base-content": "hsl(220, 13%, 18%)",     // Dark text color
+                    "info": "hsl(199, 89%, 48%)",            // Info color
+                    "success": "hsl(142, 76%, 36%)",         // Success color
+                    "warning": "hsl(43, 96%, 56%)",         // Warning color
+                    "error": "hsl(0, 91%, 71%)",           // Error color
                 },
             },
             "light",
@@ -38,6 +38,8 @@ export default {
         prefix: "", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
         logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
         themeRoot: ":root", // The element that receives theme color CSS variables
+        darkTheme: "dark", // name of one of the included themes for dark mode
+        defaultTheme: "rantauhub", // name of default theme
     },
 };
 

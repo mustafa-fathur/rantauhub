@@ -52,4 +52,12 @@ class Post extends Model
     {
         return $this->hasMany(PostLike::class);
     }
+
+    /**
+     * Get the tags for this post
+     */
+    public function tags(): HasMany
+    {
+        return $this->hasMany(PostTag::class);
+    }
 }
