@@ -1,4 +1,4 @@
-<x-livewire.partials.layout>
+<x-layouts.main>
     <!-- Hero Section -->
     <section class="relative h-[600px] md:h-[700px] flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
@@ -440,4 +440,4 @@
             </div>
         </div>
     </section>
-</x-livewire.partials.layout>
+</x-layouts.main>

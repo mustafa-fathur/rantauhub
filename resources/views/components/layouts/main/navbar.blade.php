@@ -15,11 +15,10 @@
                 <a href="{{ route('home') }}" class="text-zinc-700 hover:text-primary transition font-medium {{ request()->routeIs('home') ? 'text-primary' : '' }}">
                     Home
                 </a>
-                <a href="#umkm" class="text-zinc-700 hover:text-primary transition">UMKM</a>
-                <a href="#mentor" class="text-zinc-700 hover:text-primary transition">Mentor</a>
-                <a href="#forum" class="text-zinc-700 hover:text-primary transition">Forum</a>
-                <a href="#investasi" class="text-zinc-700 hover:text-primary transition">Investasi</a>
-                <a href="#tentang" class="text-zinc-700 hover:text-primary transition">Tentang</a>
+                <a href="{{ route('umkm') }}" class="text-zinc-700 hover:text-primary transition">Pendanaan UMKM</a>
+                <a href="{{ route('mentor') }}" class="text-zinc-700 hover:text-primary transition">Mentor</a>
+                <a href="{{ route('forum') }}" class="text-zinc-700 hover:text-primary transition">Forum</a>
+                <a href="{{ route('about') }}" class="text-zinc-700 hover:text-primary transition">Tentang</a>
             </div>
 
             <!-- Auth Buttons -->

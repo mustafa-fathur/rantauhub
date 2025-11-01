@@ -6,16 +6,24 @@
         @livewireStyles
     </head>
     <body class="bg-white min-h-screen flex flex-col">
-        <!-- Navbar -->
-        @include('livewire.partials.navbar')
-        
-        <!-- Main Content -->
-        <main class="flex-1">
-            {{ $slot }}
-        </main>
+        <div class="flex min-h-screen">
+            <!-- User Sidebar -->
+            @include('components.user.layout')
+            
+            <!-- Main Content Area -->
+            <div class="flex-1 flex flex-col">
+                <!-- Navbar -->
+                <x-layouts.main.navbar />
+                
+                <!-- Main Content -->
+                <main class="flex-1 p-6">
+                    @yield('content')
+                </main>
 
-        <!-- Footer -->
-        @include('livewire.partials.footer')
+                <!-- Footer -->
+                <x-layouts.main.footer />
+            </div>
+        </div>
 
         <!-- Mobile Menu Drawer -->
         <div id="mobile-menu" class="fixed inset-0 z-50 hidden md:hidden">
@@ -31,17 +39,11 @@
                         </button>
                     </div>
                     <nav class="space-y-2">
-                        <a href="{{ route('home') }}" class="block px-4 py-2 rounded-lg {{ request()->routeIs('home') ? 'bg-primary text-white' : 'text-zinc-700 hover:bg-zinc-100' }}">Home</a>
-                        <a href="#umkm" class="block px-4 py-2 rounded-lg text-zinc-700 hover:bg-zinc-100">UMKM</a>
-                        <a href="#mentor" class="block px-4 py-2 rounded-lg text-zinc-700 hover:bg-zinc-100">Mentor</a>
-                        <a href="#forum" class="block px-4 py-2 rounded-lg text-zinc-700 hover:bg-zinc-100">Forum</a>
-                        <a href="#investasi" class="block px-4 py-2 rounded-lg text-zinc-700 hover:bg-zinc-100">Investasi</a>
-                        <a href="#tentang" class="block px-4 py-2 rounded-lg text-zinc-700 hover:bg-zinc-100">Tentang</a>
-                        @auth
-                            <div class="border-t border-zinc-200 my-2"></div>
-                            <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded-lg text-zinc-700 hover:bg-zinc-100">Dashboard</a>
-                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 rounded-lg text-zinc-700 hover:bg-zinc-100">Profile</a>
-                        @endauth
+                        <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded-lg {{ request()->routeIs('dashboard') ? 'bg-primary text-white' : 'text-zinc-700 hover:bg-zinc-100' }}">Dashboard</a>
+                        <a href="{{ route('my-forum') }}" class="block px-4 py-2 rounded-lg {{ request()->routeIs('my-forum') ? 'bg-primary text-white' : 'text-zinc-700 hover:bg-zinc-100' }}">Forum Saya</a>
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 rounded-lg {{ request()->routeIs('profile.edit') ? 'bg-primary text-white' : 'text-zinc-700 hover:bg-zinc-100' }}">Profile</a>
+                        <div class="border-t border-zinc-200 my-2"></div>
+                        <a href="{{ route('home') }}" class="block px-4 py-2 rounded-lg text-zinc-700 hover:bg-zinc-100">Home</a>
                     </nav>
                 </div>
             </div>
@@ -81,4 +83,3 @@
         @livewireScripts
     </body>
 </html>
-

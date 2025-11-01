@@ -126,7 +126,9 @@
             </flux:dropdown>
         </flux:header>
 
-        {{ $slot }}
+        <flux:main>
+            @yield('content')
+        </flux:main>
 
         @fluxScripts
     </body>
