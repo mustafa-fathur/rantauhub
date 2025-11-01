@@ -5,8 +5,12 @@ use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('livewire.home');
 })->name('home');
+
+
+
+// Auth Routes
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -30,3 +34,4 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 });
+
